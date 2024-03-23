@@ -1,8 +1,4 @@
-package com.driver.services;
-
-import com.driver.models.Blog;
 import com.driver.models.Image;
-import com.driver.repositories.BlogRepository;
 import com.driver.repositories.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,34 +8,38 @@ import java.util.List;
 @Service
 public class ImageService {
 
-    private final BlogRepository blogRepository;
     private final ImageRepository imageRepository;
 
     @Autowired
-    public ImageService(BlogRepository blogRepository, ImageRepository imageRepository) {
-        this.blogRepository = blogRepository;
+    public ImageService(ImageRepository imageRepository) {
         this.imageRepository = imageRepository;
     }
 
-    public Image addImage(Integer blogId, String description, String dimensions) {
-        Blog blog = blogRepository.findById(blogId).orElse(null);
-        if (blog == null) {
-            return null; 
+    public int countImagesInScreen(String screenDimensions) {
+        // Fetch all images from the repository
+        List<Image> images = imageRepository.findAll();
+
+        // Calculate the number of images that can fit into the screen based on their dimensions
+        int screenWidth = parseScreenWidth(screenDimensions); // Assuming screen width is extracted from the provided screenDimensions
+        int totalImages = 0;
+        for (Image image : images) {
+            int imageWidth = parseImageWidth(image.getDimensions()); // Assuming image width is extracted from the image dimensions
+            if (imageWidth <= screenWidth) {
+                totalImages++;
+            }
         }
-
-        Image newImage = new Image(description, dimensions);
-
-        blog.addImage(newImage);
-        blogRepository.save(blog); 
-
-        return imageRepository.save(newImage);
+        return totalImages;
     }
 
-    public void deleteImage(Integer id) {
-        imageRepository.deleteById(id);
+    private int parseScreenWidth(String screenDimensions) {
+        // Assuming screen width is extracted from the provided screenDimensions
+        String[] parts = screenDimensions.split("x");
+        return Integer.parseInt(parts[0]);
     }
 
-    public int countImagesInScreen(Integer id, String screenDimensions) {
-        return 5;
+    private int parseImageWidth(String imageDimensions) {
+        // Assuming image width is extracted from the image dimensions
+        String[] parts = imageDimensions.split("x");
+        return Integer.parseInt(parts[0]);
     }
 }
