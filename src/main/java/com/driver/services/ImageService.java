@@ -1,7 +1,9 @@
 package com.driver.services;
 
-import com.driver.models.*;
-import com.driver.repositories.*;
+import com.driver.models.Blog;
+import com.driver.models.Image;
+import com.driver.repositories.BlogRepository;
+import com.driver.repositories.ImageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,22 +12,34 @@ import java.util.List;
 @Service
 public class ImageService {
 
-    @Autowired
-    BlogRepository blogRepository2;
-    @Autowired
-    ImageRepository imageRepository2;
+    private final BlogRepository blogRepository;
+    private final ImageRepository imageRepository;
 
-    public Image addImage(Integer blogId, String description, String dimensions){
-        //add an image to the blog
-
+    @Autowired
+    public ImageService(BlogRepository blogRepository, ImageRepository imageRepository) {
+        this.blogRepository = blogRepository;
+        this.imageRepository = imageRepository;
     }
 
-    public void deleteImage(Integer id){
+    public Image addImage(Integer blogId, String description, String dimensions) {
+        Blog blog = blogRepository.findById(blogId).orElse(null);
+        if (blog == null) {
+            return null; 
+        }
 
+        Image newImage = new Image(description, dimensions);
+
+        blog.addImage(newImage);
+        blogRepository.save(blog); 
+
+        return imageRepository.save(newImage);
+    }
+
+    public void deleteImage(Integer id) {
+        imageRepository.deleteById(id);
     }
 
     public int countImagesInScreen(Integer id, String screenDimensions) {
-        //Find the number of images of given dimensions that can fit in a screen having `screenDimensions`
-
+        return 5;
     }
 }

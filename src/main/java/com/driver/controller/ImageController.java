@@ -13,15 +13,17 @@ import org.springframework.web.bind.annotation.*;
 public class ImageController {
 
     private final ImageService imageService;
+    private final BlogService blogService;
 
     @Autowired
-    public ImageController(ImageService imageService) {
+    public ImageController(ImageService imageService, BlogService blogService) {
         this.imageService = imageService;
+        this.blogService = blogService;
     }
 
     @PostMapping("/{blogId}/add-image")
     public ResponseEntity<String> addImage(@PathVariable int blogId, @RequestParam String description, @RequestParam String dimensions) {
-        // Assuming I have a way to retrieve the Blog object by blogId
+        // Assuming you have a way to retrieve the Blog object by blogId
         Blog blog = blogService.findBlogById(blogId);
         if (blog == null) {
             return new ResponseEntity<>("Blog not found", HttpStatus.NOT_FOUND);
