@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<Void> updateUser(@RequestParam Integer id, @RequestParam String password) {
+    public ResponseEntity<Void> updateUser(@RequestParam int id, @RequestParam String password) {
         userService.updateUserPassword(id, password);
         return new ResponseEntity<>(HttpStatus.OK);
     }

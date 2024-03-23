@@ -20,11 +20,11 @@ public class BlogController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> createBlog(@RequestParam Integer userId ,
+    public ResponseEntity<Void> createBlog(@RequestParam int userId ,
                                            @RequestParam String title,
                                            @RequestParam String content) {
-        // Assuming I have a way to retrieve the User object by userId
-        User user = userService.findUserById(userId);
+        // Assuming you have a way to retrieve the User object by userId
+        User user = blogService.findUserById(userId);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
