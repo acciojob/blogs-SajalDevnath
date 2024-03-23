@@ -23,7 +23,6 @@ public class BlogController {
     public ResponseEntity<Void> createBlog(@RequestParam Integer userId ,
                                            @RequestParam String title,
                                            @RequestParam String content) {
-        // Assuming you have a way to retrieve the User object by userId
         User user = userService.findUserById(userId);
         if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

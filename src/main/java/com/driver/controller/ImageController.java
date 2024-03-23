@@ -21,7 +21,6 @@ public class ImageController {
 
     @PostMapping("/{blogId}/add-image")
     public ResponseEntity<String> addImage(@PathVariable int blogId, @RequestParam String description, @RequestParam String dimensions) {
-        // Assuming you have a way to retrieve the Blog object by blogId
         Blog blog = blogService.findBlogById(blogId);
         if (blog == null) {
             return new ResponseEntity<>("Blog not found", HttpStatus.NOT_FOUND);
@@ -34,7 +33,6 @@ public class ImageController {
 
     @GetMapping("/countImagesInScreen/{id}/{screenDimensions}")
     public ResponseEntity<Integer> countImagesInScreen(@PathVariable int id, @PathVariable String screenDimensions) {
-        // Logic to count number of images that can fit into given screen size
         int count = imageService.countImagesFitScreen(id, screenDimensions);
         return new ResponseEntity<>(count, HttpStatus.OK);
     }
